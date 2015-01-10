@@ -5,13 +5,13 @@
 #=============================================#
 #  Licencja skryptu:                          #
 # * Nie zezwalam na:                          #
-# - Usuwanie tresci o autorze!                #
-# - Podszywanie sie pod autora!               #
-# - Uzywanie kodu skryptu w swoich skryptach! #
+# - Usuwanie treści o autorze!                #
+# - Podszywanie się pod autora!               #
+# - Używanie kodu skryptu w swoich skryptach! #
 # - Zarabianie na skrypcie!                   #
 # * Zezwalam na:                              #
-# + Dodawanie kodu na swoja potrzebe!         #
-# + Modyfikowanie wiadomosci!                 #
+# + Dodawanie kodu na swoja potrzebę!         #
+# + Modyfikowanie wiadomości!                 #
 #=============================================#
 
 options:
@@ -39,22 +39,22 @@ command /jail [<text>] [<player>] [<text>]:
 	trigger:
 		arg 1 is not set:
 			send "&6---------==========[ {@tag} ]==========----------"
-			send "&c/jail graj &6- dobrowolnie wchodzisz rozrywkowo do wiezienia, zawsze mozesz wyjsc"
-			send "&c/jail przymknij <gracz> <powod> &6- przymusowo zamyka gracza, bez mozliwosci wyjscia"
-			send "&c/jail wyjdz &6- jezeli nie zostales zamkniety, wychodzisz z wiezienia"
+			send "&c/jail graj &6- dobrowolnie wchodzisz rozrywkowo do więzienia, zawsze możesz wyjść"
+			send "&c/jail przymknij <gracz> <powod> &6- przymusowo zamyka gracza, bez możliwosci wyjścia"
+			send "&c/jail wyjdz &6- jeżeli nie zostałeś zamknięty, wychodzisz z więzienia"
 		arg 1 is "graj":
 			{jail.%player%} is false:
 				set {jail.%player%} to true
 				teleport player to {wejscie.wiezienia}
 				set {ekwipunek.%player%} to serialized inventory of player
 				clear player's inventory
-				send "&6Wchodzisz do wiezienia"
+				send "&6Wchodzisz do więzienia"
 		arg 1 is "przymknij":
 			if has permission "jail.zamykanie" or "jail.admin":
 				arg 2 is set:
 					arg 3 is set:
 						player-argument has permission "jail.niezamykanie":
-							send "&cTen gracz nie moze byc zamkniety w wiezieniu"
+							send "&cTen gracz nie moze być zamknięty w więzieniu"
 						else:
 							set {jail.przymus.%player-argument%} to true
 							set {jail.%player-argument%} to true
@@ -63,21 +63,21 @@ command /jail [<text>] [<player>] [<text>]:
 							set {ekwipunek.%player-argument%} to serialized inventory of player-argument
 							clear player-argument's inventory
 					else:
-						send "&cMusisz podac powod uwiezienia"
+						send "&cMusisz podać powód uwięzienia"
 				else:
-					send "&cMusisz podac nick gracza"
+					send "&cMusisz podać nick gracza"
 			else:
-				send "&4Nie masz uprawnien aby zamykac gracza"
+				send "&4Nie masz uprawnień aby zamykać gracza"
 		arg 1 is "wyjdz":
 			{jail.%player%} is true:
 				{jail.przymus.%player%} is false:
 					teleport player to {wyjscie.po.wiezieniu}
 					clear player's inventory
 					restore inventory of player from {ekwipunek.%player%}
-					send "&6Wychodzisz z wiezienia"
+					send "&6Wychodzisz z więzienia"
 					set {jail.%player%} to false
 				else:
-					send "&4Jestes przymusowo w wiezieniu, musisz odbyc kare"
+					send "&4Jesteś przymusowo w więzieniu, musisz odbyć karę"
 		arg 1 is "autor":
 			send "&6-------=======[ {@tag} &6]=======-------"
 			send "&6Autorem skryptu jest herhor67"
@@ -172,11 +172,11 @@ on rightclick on villager:
 			add 1 to {poziom.%player%}
 			if {poziom.%player%} is less than {@iloscpoziomow}:
 				remove 50 from {zarobki.%player%}
-				send "&6Jestes teraz w sektorze &c%{poziom.%player%}%&6/&c{@iloscpoziomow}"
+				send "&6Jesteś teraz w sektorze &c%{poziom.%player%}%&6/&c{@iloscpoziomow}"
 				give player 1 iron pickaxe
 			else:
 				add 1 to {przejscia.%player%}
-				send "&2Gratulacje! Wyszedłeś z więzienia"
+				send "&2Gratulacje! Wyszedłeś z więzienia!"
 				teleport player to {spawn.po.wiezieniu}
 				clear player's inventory
 				restore inventory of player from {ekwipunek.%player%}
