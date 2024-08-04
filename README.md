@@ -1,2 +1,1 @@
-# JailBreak
-Więzienia na serwerze!
+# Skript

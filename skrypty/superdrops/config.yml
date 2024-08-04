@@ -1,0 +1,104 @@
+multipliers:
+    permissions:
+      mvip+: '1.4'
+      mvip: '1.3'
+      vip+: '1.2'
+      vip: '1.1'
+    fortune:
+      0: '1.0'
+      1: '1.1'
+      2: '1.2'
+      3: '1.3'
+    other:
+      super: '10'
+      turbodrop: '3'
+
+messages:
+  dropped: '&6You have found &c{ITEM}'
+  topformat: '&4{NUMBER}. &6{NICK} - &c{SCORE}'
+
+menu:
+  tag: '         &4&lSuperDrops'
+  back: '&4&l<- &7Back'
+  chance: '&cClick to show CHANCE'
+  top: '&cClick to show TOP'
+  blocks: '&8&lBlocks'
+  entities: '&c&lMobs'
+  fishing: '&6&lFishing'
+  clicktoshow: '&6Click to show drops'
+  clicktoshowtop: '&6Click to show statistics'
+  fortune: '&c&lFortune' #will be shown as eg. &c&lFortune I
+  
+blocks:
+  stone:
+    xp: '1'
+    carbon:
+      name: '&0&lCOAL'
+      item: 'coal item'
+      itemsmelted: 'charcoal'
+      chance: '5'
+      tools:
+        - 'any pickaxe'
+      heightmin: '10'
+      heightmax: '128'
+    daimondz:
+      name: '&b&lDIAMOND'
+      item: 'diamond'
+      itemsmelted: 'diamond'
+      chance: '5'
+      tools:
+        - 'any pickaxe'
+      heightmin: '10'
+      heightmax: '128'
+  netherrack:
+    xp: '2'
+    prasiolite:
+      name: '&f&lQUARTZ'
+      item: 'quartz item'
+      itemsmelted: 'quartz item'
+      chance: '5'
+      tools:
+        - 'any pickaxe'
+      heightmin: '50'
+      heightmax: '128'
+
+mobs:
+  cow:
+    xp: '5'
+    mlego:
+      name: '&f&lMILK'
+      item: 'milk bucket'
+      itemsmelted: 'milk bucket'
+      chance: '1'
+      tools:
+        - 'any sword'
+      biomes:
+        - 'desert'
+        - 'hell'
+        - 'beach'
+        - 'desert hills'
+        - 'jungle'
+        - 'jungle hills'
+  pig:
+    xp: '5'
+    kupa:
+      name: '&6Gunwo'
+      item: 'dirt'
+      itemsmelted: 'dirt'
+      chance: '10'
+      tools:
+        - 'any sword'
+
+fishing:
+  xp: '3'
+  treasure:
+    name: '&fMILK'
+    item: 'milk bucket'
+    itemsmelted: 'milk bucket'
+    chance: '10'
+
+replace:
+  coal ore:
+    replacewith: 'stone'
+    message: '&cThis item drops from stone!'
+   
