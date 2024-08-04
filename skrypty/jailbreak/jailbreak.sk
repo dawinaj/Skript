@@ -1,0 +1,187 @@
+#hercore jailbreak
+#=============================================#
+#   Skrypt napisany przez: herhor67           #
+#   Nazwa: JailBreak                          #
+#=============================================#
+#  Licencja skryptu:                          #
+# * Nie zezwalam na:                          #
+# - Usuwanie treści o autorze!                #
+# - Podszywanie się pod autora!               #
+# - Używanie kodu skryptu w swoich skryptach! #
+# - Zarabianie na skrypcie!                   #
+# - Wrzucanie skryptu do internetu!           #
+# * Zezwalam na:                              #
+# + Dodawanie kodu na swoja potrzebę!         #
+# + Modyfikowanie wiadomości!                 #
+#=============================================#
+
+options:
+	iloscpoziomow: 20
+	hajszastone: 10
+	tag: &8Jail&4Break
+	nazwagliniarza: &1Gliniarz
+	nazwadajacegokase: &cHandlarz
+
+#==========================#
+#        NIE EDYTUJ!       #
+#==========================#
+
+variables:
+	{jail.%player%} = false
+	{poziom.%player%} = 0
+	{przejscia.%player%} = 0
+	{zarobki.%player%} = 0
+	{jail.przymus.%player%} = false
+ 
+#--------------------------#
+#      komenda gracza      #
+#--------------------------#
+command /jail [<text>] [<player>] [<text>]:
+	trigger:
+		arg 1 is not set:
+			send "&6---------==========[ {@tag} ]==========----------"
+			send "&c/jail graj &6- dobrowolnie wchodzisz rozrywkowo do więzienia, zawsze możesz wyjść"
+			send "&c/jail przymknij <gracz> <powod> &6- przymusowo zamyka gracza, bez możliwosci wyjścia"
+			send "&c/jail wyjdz &6- jeżeli nie zostałeś zamknięty, wychodzisz z więzienia"
+		arg 1 is "graj":
+			{jail.%player%} is false:
+				set {jail.%player%} to true
+				teleport player to {wejscie.wiezienia}
+				set {ekwipunek.%player%} to serialized inventory of player
+				clear player's inventory
+				send "&6Wchodzisz do więzienia"
+		arg 1 is "przymknij":
+			if has permission "jail.zamykanie" or "jail.admin":
+				arg 2 is set:
+					arg 3 is set:
+						player-argument has permission "jail.niezamykanie":
+							send "&cTen gracz nie moze być zamknięty w więzieniu"
+						else:
+							set {jail.przymus.%player-argument%} to true
+							set {jail.%player-argument%} to true
+							send "&cZostales uwieziony przez %player%. Powod: %arg 3%" to player-argument
+							teleport arg 2 to {wejscie.wiezienia}
+							set {ekwipunek.%player-argument%} to serialized inventory of player-argument
+							clear player-argument's inventory
+					else:
+						send "&cMusisz podać powód uwięzienia"
+				else:
+					send "&cMusisz podać nick gracza"
+			else:
+				send "&4Nie masz uprawnień aby zamykać gracza"
+		arg 1 is "wyjdz":
+			{jail.%player%} is true:
+				{jail.przymus.%player%} is false:
+					teleport player to {wyjscie.po.wiezieniu}
+					clear player's inventory
+					restore inventory of player from {ekwipunek.%player%}
+					send "&6Wychodzisz z więzienia"
+					set {jail.%player%} to false
+				else:
+					send "&4Jesteś przymusowo w więzieniu, musisz odbyć karę"
+		arg 1 is "autor":
+			send "&6-------=======[ {@tag} &6]=======-------"
+			send "&6Autorem skryptu jest herhor67"
+			send "&chttp://herhor67.tk"
+
+#--------------------------#
+#          blokady         #
+#--------------------------#
+on command:
+	{jail.%player%} is true:
+		{jail.przymus.%player%} is false:
+			set {_y} to location of player
+			wait 1 tick
+			{jail.%player%} is true:
+				if {_y} is location of player:
+					stop
+				else:
+					send "&4Nie możesz się teleportować"
+					teleport player to {_y}
+		else:
+			cancel event
+			send "&4Jesteś w więzieniu przymusowo, nie możesz używać żadnych komend"
+
+on break:
+	block isn't stone or cobblestone:
+		{jail.%player%} is true:
+			cancel event
+			send "&cJesteś w więzieniu, możesz tylko kopać: Kamień, Bruk"
+on place:
+	{jail.%player%} is true:
+		cancel event
+		send "&6Jesteś w więzieniu, możesz tylko kopać: Kamień, Bruk"
+on damage:
+	victim is villager:
+		name of victim is set:
+			{jail.%attacker%} is true:
+				cancel event
+				send "&cNie możesz bić policjantów" to attacker
+
+#-------------------------------------------#
+#              komendy admina               #
+#-------------------------------------------#
+
+command /jailustaw [<text>] [<text>]:
+	permission: jail.admin
+	permission message: &cNie masz uprawnień aby to zrobić!
+	trigger:
+		arg 1 is "ustaw":
+			arg 2 is "spawn":
+				set {wejscie.wiezienia} to location of player
+				send "&6Ustawiles spawn"
+			arg 2 is "wyjscie":
+				set {wyjscie.po.wiezieniu} to location of player
+				send "&6Ustawiles wyjscie"
+		arg 1 is "spawn":
+			arg 2 is "handlarz":
+				spawn villager at location of player
+				apply slowness to last spawned entity for 9999999999999999999999999999999 days
+				apply resistance 20 to last spawned entity for 999999999999999999999999999999999 days
+				set the name of last spawned entity to "&c{@nazwadajacegokase}"
+				send "&2Zespawnowałeś osadnika zamieniajacego cobblestone na pieniądze"
+			arg 2 is "policjant":
+				spawn villager at location of player
+				apply resistance 20 to last spawned entity for 999999999999999999999999999999999 days
+				apply slowness to last spawned entity for 9999999999999999999999999999999 days
+				set the name of last spawned entity to "&1{@nazwagliniarza}"
+				send "&2Zespawnowałeś osadnika odbierajacego pieniądze"
+		arg 1 is "wiezienie":
+			execute player command "/rg define jailskrypt"
+			execute player command "/rg setpriority jailskrypt 5"
+
+#--------------------------#
+#       kasa i levele      #
+#--------------------------#
+on rightclick on villager:
+	name of clicked entity is "&c{@nazwadajacegokase}":
+		cancel event
+		if player has 64 cobblestone:
+			remove 64 cobblestone from player
+			add 64 to {zarobki.%player%}
+		else if player has 32 cobblestone:
+			remove 32 cobblestone from player
+			add 32 to {zarobki.%player%}
+		else if player has 16 cobblestone:
+			remove 16 cobblestone from player
+			add 16 to {zarobki.%player%}
+		else:
+			send "&cMasz za mało bruku aby go zamienić na kaucję"
+	if name of clicked entity is "&1{@nazwagliniarza}":
+		cancel event
+		if {zarobki.%player%} is greater than 50:
+			add 1 to {poziom.%player%}
+			if {poziom.%player%} is less than {@iloscpoziomow}:
+				remove 50 from {zarobki.%player%}
+				send "&6Jesteś teraz w sektorze &c%{poziom.%player%}%&6/&c{@iloscpoziomow}"
+				give player 1 iron pickaxe
+			else:
+				add 1 to {przejscia.%player%}
+				send "&2Gratulacje! Wyszedłeś z więzienia!"
+				teleport player to {spawn.po.wiezieniu}
+				clear player's inventory
+				restore inventory of player from {ekwipunek.%player%}
+				set {poziom.%player%} to 0
+
+# End of File #
+# Thanks 4 using #

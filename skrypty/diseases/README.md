@@ -1,0 +1,2 @@
+# Diseases
+Choroby na serwerze!
